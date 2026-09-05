@@ -1,0 +1,177 @@
+<div class="page form-page">
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="page-label">
+        CLIENTS
+      </div>
+
+      <h1>
+        {{
+          clientId
+            ? 'Modifier le client'
+            : 'Nouveau client'
+        }}
+      </h1>
+
+      <p>
+        Renseignez les informations du client.
+      </p>
+
+    </div>
+
+  </div>
+
+ 
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="card form-card">
+
+    <div class="form-section">
+
+      <h2>
+        Informations générales
+      </h2>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>Nom *</label>
+
+          <input
+            type="text"
+            formControlName="nom"
+            placeholder="Nom du client">
+
+          @if (
+            form.controls.nom.touched &&
+            form.controls.nom.invalid
+          ) {
+            <small class="error">
+              Le nom est obligatoire.
+            </small>
+          }
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Prénom / raison sociale *
+          </label>
+
+          <input
+            type="text"
+            formControlName="prenomOuRaisonSociale"
+            placeholder="Prénom ou société">
+
+          @if (
+            form.controls.prenomOuRaisonSociale.touched &&
+            form.controls.prenomOuRaisonSociale.invalid
+          ) {
+            <small class="error">
+              Ce champ est obligatoire.
+            </small>
+          }
+
+        </div>
+
+        <div class="field">
+
+          <label>Email *</label>
+
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="client@email.com">
+
+          @if (
+            form.controls.email.touched &&
+            form.controls.email.invalid
+          ) {
+            <small class="error">
+              Adresse email invalide.
+            </small>
+          }
+
+        </div>
+
+        <div class="field">
+
+          <label>Téléphone *</label>
+
+          <input
+            type="text"
+            formControlName="telephone"
+            placeholder="+216 00 000 000">
+
+          @if (
+            form.controls.telephone.touched &&
+            form.controls.telephone.invalid
+          ) {
+            <small class="error">
+              Le téléphone est obligatoire.
+            </small>
+          }
+
+        </div>
+
+        <div class="field field-full">
+
+          <label>Adresse *</label>
+
+          <input
+            type="text"
+            formControlName="adresse"
+            placeholder="Adresse du client">
+
+          @if (
+            form.controls.adresse.touched &&
+            form.controls.adresse.invalid
+          ) {
+            <small class="error">
+              L'adresse est obligatoire.
+            </small>
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()">
+
+        Annuler
+
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loading">
+
+        {{
+          loading
+            ? 'Enregistrement...'
+            : clientId
+              ? 'Enregistrer'
+              : 'Créer le client'
+        }}
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

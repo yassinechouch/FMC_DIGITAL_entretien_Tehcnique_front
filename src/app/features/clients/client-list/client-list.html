@@ -1,0 +1,142 @@
+<div class="page">
+
+  <div class="page-header">
+
+    <div>
+      <div class="page-label">GESTION COMMERCIALE</div>
+      <h1>Clients</h1>
+      <p>Gérez l'ensemble de vos clients.</p>
+    </div>
+
+    <a
+      routerLink="/clients/new"
+      class="btn btn-primary">
+
+      + Nouveau client
+    </a>
+
+  </div>
+  @if (successMessage) {
+    <div class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  }
+  @if (errorMessage) {
+    <div class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <h2>Liste des clients</h2>
+        <span>
+          {{ clients.length }} client(s)
+        </span>
+      </div>
+
+    </div>
+
+    @if (loading) {
+
+      <div class="state">
+        Chargement...
+      </div>
+
+    } @else if (clients.length === 0) {
+
+      <div class="state">
+        Aucun client disponible.
+      </div>
+
+    } @else {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Adresse</th>
+              <th>Création</th>
+              <th class="actions-column">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (client of clients; track client.id) {
+
+              <tr>
+
+                <td>
+                  <div class="client-cell">
+
+                    <div class="avatar">
+                      {{ client.nom.charAt(0).toUpperCase() }}
+                    </div>
+
+                    <div>
+                      <strong>{{ client.nom }}</strong>
+
+                      <small>
+                        {{ client.prenomOuRaisonSociale }}
+                      </small>
+                    </div>
+
+                  </div>
+                </td>
+
+                <td>
+                  {{ client.email }}
+                </td>
+
+                <td>
+                  {{ client.telephone }}
+                </td>
+
+                <td>
+               {{ client.adresses[0] || '-' }}
+                </td>
+
+                <td>
+                  {{ client.dateCreation | date:'dd/MM/yyyy' }}
+                </td>
+
+                <td class="actions">
+
+                  <button
+                    class="btn-icon"
+                    (click)="edit(client.id)">
+                    Modifier
+                  </button>
+
+                  <button
+                    class="btn-icon danger"
+                    (click)="delete(client)">
+                    Supprimer
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

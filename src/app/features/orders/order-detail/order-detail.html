@@ -1,0 +1,184 @@
+<div class="page">
+
+  @if (loading==true) {
+
+    <div class="state">
+      Chargement...
+    </div>
+
+  } @else if (order) {
+
+    <div class="page-header">
+
+      <div>
+
+        <button
+          class="back-link"
+          (click)="back()">
+
+          ← Retour aux commandes
+
+        </button>
+
+        <div class="page-label">
+          COMMANDE
+        </div>
+
+        <h1>
+          {{ order.numeroCommande }}
+        </h1>
+
+        <p>
+          Créée le
+          {{ order.dateCommande | date:'dd/MM/yyyy à HH:mm' }}
+        </p>
+
+      </div>
+
+      <div class="header-actions">
+
+        @if (!isValidated()) {
+
+          <button
+            class="btn btn-secondary"
+            (click)="edit()">
+
+            Modifier
+
+          </button>
+
+          <button
+            class="btn btn-success"
+            [disabled]="validating"
+            (click)="validate()">
+
+            {{
+              validating
+                ? 'Validation...'
+                : '✓ Valider la commande'
+            }}
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+      <div class="card info-card">
+
+        <span>Client</span>
+
+        <strong>
+          {{ order.nomClient }}
+        </strong>
+
+      </div>
+
+      <div class="card info-card">
+
+        <span>Statut</span>
+
+        <strong>
+          {{ statusLabel(order.statut) }}
+        </strong>
+
+      </div>
+
+      <div class="card info-card">
+
+        <span>Total HT</span>
+
+        <strong>
+          {{ order.totalHT | number:'1.2-2' }}
+        </strong>
+
+      </div>
+
+      <div class="card info-card highlighted">
+
+        <span>Total TTC</span>
+
+        <strong>
+          {{ order.totalTTC | number:'1.2-2' }}
+        </strong>
+
+      </div>
+
+    </div>
+
+    <div class="card lines-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>Détail des produits</h2>
+
+          <span>
+            {{ order.lignes.length }} ligne(s)
+          </span>
+        </div>
+
+      </div>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Quantité</th>
+              <th>Prix unitaire HT</th>
+              <th>Total ligne</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (
+              line of order.lignes;
+              track line.id
+            ) {
+
+              <tr>
+
+                <td>
+                  <strong>
+                    {{ line.nomProduit }}
+                  </strong>
+                </td>
+
+                <td>
+                  {{ line.quantite }}
+                </td>
+
+                <td>
+                  {{ line.prixUnitaire | number:'1.2-2' }}
+                </td>
+
+                <td>
+                  <strong>
+                    {{ line.totalLigne | number:'1.2-2' }}
+                  </strong>
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

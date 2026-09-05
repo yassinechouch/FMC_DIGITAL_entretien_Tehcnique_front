@@ -1,0 +1,41 @@
+@if (toastService.toast(); as toast) {
+
+  <div
+    class="toast"
+    [class.toast-success]="toast.type === 'success'"
+    [class.toast-error]="toast.type === 'error'">
+
+    <div class="toast-content">
+
+      <div class="toast-icon">
+        @if (toast.type === 'success') {
+          ✓
+        } @else {
+          !
+        }
+      </div>
+
+      <div>
+        <strong>
+          {{
+            toast.type === 'success'
+              ? 'Succès'
+              : 'Erreur'
+          }}
+        </strong>
+
+        <p>{{ toast.message }}</p>
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="toast-close"
+      (click)="toastService.close()">
+      ×
+    </button>
+
+  </div>
+
+}

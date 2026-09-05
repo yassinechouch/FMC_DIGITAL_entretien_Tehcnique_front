@@ -1,0 +1,129 @@
+<div class="page">
+
+  <div class="page-header">
+
+    <div>
+      <div class="page-label">CATALOGUE</div>
+
+      <h1>Produits</h1>
+
+      <p>
+        Gérez vos produits, prix et stocks.
+      </p>
+    </div>
+
+    <a
+      routerLink="/products/new"
+      class="btn btn-primary">
+
+      + Nouveau produit
+    </a>
+
+  </div>
+
+  
+
+  <div class="card">
+
+    <div class="card-header">
+      <div>
+        <h2>Catalogue produits</h2>
+        <span>
+          {{ products.length }} produit(s)
+        </span>
+      </div>
+    </div>
+
+    @if (loading==true) {
+
+      <div class="state">
+        Chargement...
+      </div>
+
+    } @else {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Référence</th>
+              <th>Produit</th>
+              <th>Prix HT</th>
+              <th>Stock</th>
+              <th>Création</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (product of products; track product.id) {
+
+              <tr>
+
+                <td>
+                  <span class="reference">
+                    {{ product.reference }}
+                  </span>
+                </td>
+
+                <td>
+                  <strong>
+                    {{ product.nomProduit }}
+                  </strong>
+
+                  <small class="description">
+                    {{ product.description }}
+                  </small>
+                </td>
+
+                <td>
+                  {{ product.prixUnitaireHT | number:'1.2-2' }}
+                </td>
+
+                <td>
+                  <span
+                    class="stock"
+                    [class.low]="product.quantiteStock <= 5">
+
+                    {{ product.quantiteStock }}
+                  </span>
+                </td>
+
+                <td>
+                  {{ product.dateCreation | date:'dd/MM/yyyy' }}
+                </td>
+
+                <td class="actions">
+
+                  <button
+                    class="btn-icon"
+                    (click)="edit(product.id)">
+                    Modifier
+                  </button>
+
+                  <button
+                    class="btn-icon danger"
+                    (click)="delete(product)">
+                    Supprimer
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

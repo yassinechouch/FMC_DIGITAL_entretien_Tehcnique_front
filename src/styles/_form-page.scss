@@ -1,0 +1,103 @@
+.form-card {
+  max-width: 950px;
+  overflow: hidden;
+}
+
+.form-section {
+  padding: 28px;
+
+  h2 {
+    margin: 0 0 22px;
+
+    color: #172033;
+
+    font-size: 17px;
+  }
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  label {
+    color: #475569;
+
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+
+    padding: 11px 13px;
+
+    outline: none;
+
+    border: 1px solid #dbe3ed;
+    border-radius: 9px;
+
+    background: white;
+
+    color: #172033;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+      0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.error {
+  color: #dc2626;
+
+  font-size: 11px;
+}
+
+.form-actions {
+  padding: 18px 28px;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  border-top: 1px solid #edf2f7;
+
+  background: #fafcff;
+}
+
+@media (max-width: 700px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

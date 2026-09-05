@@ -1,0 +1,57 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  background: #f4f7fb;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  margin-left: 260px;
+  min-height: 100vh;
+}
+
+.content-container {
+  padding: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    margin-left: 0;
+    padding-top: 72px;
+  }
+
+  .content-container {
+    padding: 20px;
+  }
+}.app-shell {
+  min-height: 100vh;
+  display: flex;
+  background: #f4f7fb;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  margin-left: 260px;
+  min-height: 100vh;
+}
+
+.content-container {
+  padding: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    margin-left: 0;
+    padding-top: 72px;
+  }
+
+  .content-container {
+    padding: 20px;
+  }
+}

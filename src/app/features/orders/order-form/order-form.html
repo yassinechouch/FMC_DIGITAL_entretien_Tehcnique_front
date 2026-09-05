@@ -1,0 +1,260 @@
+<div class="page">
+
+  <div class="page-header">
+
+    <div>
+      <div class="page-label">
+        COMMANDES
+      </div>
+
+      <h1>
+        {{
+          orderId
+            ? 'Modifier la commande'
+            : 'Nouvelle commande'
+        }}
+      </h1>
+
+      <p>
+        Sélectionnez un client et ajoutez les produits.
+      </p>
+    </div>
+
+  </div>
+
+
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()">
+
+    <div class="card section-card">
+
+      <div class="section-title">
+        Informations de la commande
+      </div>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>
+            Numéro de commande *
+          </label>
+
+          <input
+            formControlName="numeroCommande"
+            placeholder="CMD-2026-001">
+
+        </div>
+
+        <div class="field">
+
+          <label>Client *</label>
+
+          <select formControlName="clientId">
+
+            <option [ngValue]="0">
+              Sélectionner un client
+            </option>
+
+            @for (client of clients; track client.id) {
+
+              <option [ngValue]="client.id">
+                {{ client.nom }}
+                {{ client.prenomOuRaisonSociale }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card section-card">
+
+      <div class="lines-header">
+
+        <div>
+          <div class="section-title">
+            Produits
+          </div>
+
+          <p>
+            Ajoutez un ou plusieurs produits.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="addLine()">
+
+          + Ajouter une ligne
+
+        </button>
+
+      </div>
+
+      <div
+        formArrayName="lignes"
+        class="order-lines">
+
+        @for (
+          line of lignes.controls;
+          track $index;
+          let i = $index
+        ) {
+
+          <div
+            class="order-line"
+            [formGroupName]="i">
+
+            <div class="field product-field">
+
+              <label>Produit</label>
+
+              <select formControlName="productId">
+
+                <option [ngValue]="0">
+                  Sélectionner
+                </option>
+
+                @for (product of products; track product.id) {
+
+                  <option [ngValue]="product.id">
+
+                    {{ product.reference }}
+                    -
+                    {{ product.nomProduit }}
+
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+            <div class="field small-field">
+
+              <label>Quantité</label>
+
+              <input
+                type="number"
+                min="1"
+                formControlName="quantite">
+
+            </div>
+
+            <div class="line-info">
+
+              <span>Prix HT</span>
+<strong>
+  {{
+    (
+      getProduct(
+        line.controls.productId.value
+      )?.prixUnitaireHT || 0
+    )
+    | number:'1.2-2'
+  }}
+</strong>
+
+            </div>
+
+            <div class="line-info">
+
+              <span>Total</span>
+
+              <strong>
+                {{
+                  getLineTotal(i)
+                    | number:'1.2-2'
+                }}
+              </strong>
+
+            </div>
+
+            <button
+              type="button"
+              class="remove-line"
+              (click)="removeLine(i)">
+
+              ×
+
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+    <div class="summary-layout">
+
+      <div></div>
+
+      <div class="card totals-card">
+
+        <div class="total-row">
+          <span>Total HT</span>
+          <strong>
+            {{ totalHT | number:'1.2-2' }}
+          </strong>
+        </div>
+
+        <div class="total-row">
+          <span>TVA (19%)</span>
+
+          <strong>
+            {{
+              totalHT * 0.19
+                | number:'1.2-2'
+            }}
+          </strong>
+        </div>
+
+        <div class="total-row total-final">
+          <span>Total TTC</span>
+
+          <strong>
+            {{ totalTTC | number:'1.2-2' }}
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="form-actions page-actions">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()">
+
+        Annuler
+
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loading">
+
+        {{ loading ? 'Enregistrement...' : 'Enregistrer la commande' }}
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

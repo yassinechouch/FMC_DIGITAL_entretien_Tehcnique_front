@@ -1,0 +1,121 @@
+<div class="page form-page">
+
+  <div class="page-header">
+
+    <div>
+      <div class="page-label">
+        PRODUITS
+      </div>
+
+      <h1>
+        {{
+          productId
+            ? 'Modifier le produit'
+            : 'Nouveau produit'
+        }}
+      </h1>
+
+      <p>
+        Configurez les informations commerciales du produit.
+      </p>
+
+    </div>
+
+  </div>
+
+ 
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="card form-card">
+
+    <div class="form-section">
+
+      <h2>Informations produit</h2>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>Référence *</label>
+
+          <input
+            formControlName="reference"
+            placeholder="Ex: PROD-001">
+
+        </div>
+
+        <div class="field">
+
+          <label>Nom du produit *</label>
+
+          <input
+            formControlName="nomProduit"
+            placeholder="Nom du produit">
+
+        </div>
+
+        <div class="field field-full">
+
+          <label>Description *</label>
+
+          <textarea
+            formControlName="description"
+            rows="4"
+            placeholder="Description du produit">
+          </textarea>
+
+        </div>
+
+        <div class="field">
+
+          <label>Prix unitaire HT *</label>
+
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="prixUnitaireHT">
+
+        </div>
+
+        <div class="field">
+
+          <label>Quantité en stock *</label>
+
+          <input
+            type="number"
+            min="0"
+            formControlName="quantiteStock">
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()">
+
+        Annuler
+
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loading">
+
+        {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
