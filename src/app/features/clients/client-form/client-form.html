@@ -24,7 +24,7 @@
 
   </div>
 
- 
+
   <form
     [formGroup]="form"
     (ngSubmit)="submit()"
@@ -36,11 +36,17 @@
         Informations générales
       </h2>
 
+
       <div class="form-grid">
+
+
+        <!-- NOM -->
 
         <div class="field">
 
-          <label>Nom *</label>
+          <label>
+            Nom *
+          </label>
 
           <input
             type="text"
@@ -51,12 +57,17 @@
             form.controls.nom.touched &&
             form.controls.nom.invalid
           ) {
+
             <small class="error">
               Le nom est obligatoire.
             </small>
+
           }
 
         </div>
+
+
+        <!-- PRENOM / RAISON SOCIALE -->
 
         <div class="field">
 
@@ -73,16 +84,23 @@
             form.controls.prenomOuRaisonSociale.touched &&
             form.controls.prenomOuRaisonSociale.invalid
           ) {
+
             <small class="error">
               Ce champ est obligatoire.
             </small>
+
           }
 
         </div>
 
+
+        <!-- EMAIL -->
+
         <div class="field">
 
-          <label>Email *</label>
+          <label>
+            Email *
+          </label>
 
           <input
             type="email"
@@ -93,16 +111,23 @@
             form.controls.email.touched &&
             form.controls.email.invalid
           ) {
+
             <small class="error">
               Adresse email invalide.
             </small>
+
           }
 
         </div>
 
+
+        <!-- TELEPHONE -->
+
         <div class="field">
 
-          <label>Téléphone *</label>
+          <label>
+            Téléphone *
+          </label>
 
           <input
             type="text"
@@ -113,36 +138,104 @@
             form.controls.telephone.touched &&
             form.controls.telephone.invalid
           ) {
+
             <small class="error">
               Le téléphone est obligatoire.
             </small>
+
           }
 
         </div>
 
-        <div class="field field-full">
 
-          <label>Adresse *</label>
+      </div>
 
-          <input
-            type="text"
-            formControlName="adresse"
-            placeholder="Adresse du client">
 
-          @if (
-            form.controls.adresse.touched &&
-            form.controls.adresse.invalid
-          ) {
-            <small class="error">
-              L'adresse est obligatoire.
-            </small>
-          }
+      <!-- ADRESSES -->
+
+      <div
+        class="addresses-section"
+        formArrayName="adresses">
+
+        <div class="addresses-header">
+
+          <div>
+
+            <label>
+              Adresses *
+            </label>
+
+            <p class="field-help">
+              Vous pouvez ajouter plusieurs adresses.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="addAdresse()">
+
+            + Ajouter une adresse
+
+          </button>
 
         </div>
+
+
+        @for (
+          adresse of adresses.controls;
+          track $index
+        ) {
+
+          <div class="address-row">
+
+            <div class="field address-field">
+
+              <label>
+                Adresse {{ $index + 1 }} *
+              </label>
+
+              <input
+                type="text"
+                [formControlName]="$index"
+                placeholder="Ex : 10 rue de Tunis, Ariana">
+
+              @if (
+                adresse.touched &&
+                adresse.invalid
+              ) {
+
+                <small class="error">
+                  L'adresse est obligatoire.
+                </small>
+
+              }
+
+            </div>
+
+
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="removeAdresse($index)"
+              [disabled]="adresses.length === 1">
+
+              Supprimer
+
+            </button>
+
+          </div>
+
+        }
 
       </div>
 
     </div>
+
+
+    <!-- ACTIONS -->
 
     <div class="form-actions">
 
@@ -154,6 +247,7 @@
         Annuler
 
       </button>
+
 
       <button
         type="submit"

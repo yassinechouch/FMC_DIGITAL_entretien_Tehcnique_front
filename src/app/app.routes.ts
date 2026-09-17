@@ -11,6 +11,8 @@ import { ProductForm } from './features/products/product-form/product-form';
 import { OrderList } from './features/orders/order-list/order-list';
 import { OrderForm } from './features/orders/order-form/order-form';
 import { OrderDetail } from './features/orders/order-detail/order-detail';
+import { TaxeList } from './features/taxes/taxe-list/taxe-list';
+import { TaxeForm } from './features/taxes/taxe-form/taxe-form';
 
 export const routes: Routes = [
   {
@@ -48,6 +50,19 @@ export const routes: Routes = [
         path: 'products/:id/edit',
         component: ProductForm
       },
+       {
+        path: 'taxes',
+        component: TaxeList
+      },
+      {
+        path: 'taxes/new',
+        component: TaxeForm
+      },
+      {
+        path: 'taxes/:id/edit',
+        component: TaxeForm
+      },
+
 
       {
         path: 'orders',

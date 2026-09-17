@@ -1,8 +1,10 @@
+
 import {
   Component,
   OnInit,
-  inject,
-  ChangeDetectorRef
+
+  ChangeDetectorRef,
+  inject
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -29,18 +31,18 @@ import {
 import {
   ToastService
 } from '../../../core/services/toast.service';
+import { TaxeService } from '../../../core/services/taxe.service';
 
 @Component({
-  selector: 'app-product-form',
+  selector: 'app-taxe-form',
   imports: [
     CommonModule,
     ReactiveFormsModule
   ],
-  templateUrl: './product-form.html',
-  styleUrl: './product-form.scss'
+  templateUrl: './taxe-form.html',
+  styleUrl: './taxe-form.scss',
 })
-export class ProductForm implements OnInit {
-
+export class TaxeForm {
   private readonly fb =
     inject(FormBuilder);
 
@@ -50,8 +52,8 @@ export class ProductForm implements OnInit {
   private readonly router =
     inject(Router);
 
-  private readonly productService =
-    inject(ProductService);
+  private readonly taxeService =
+    inject(TaxeService);
 
   private readonly toastService =
     inject(ToastService);
@@ -59,25 +61,24 @@ export class ProductForm implements OnInit {
   private readonly cdr =
     inject(ChangeDetectorRef);
 
-  productId?: number;
+  taxeId?: number;
 
   loading = false;
-
-  readonly form =
+   readonly form =
     this.fb.nonNullable.group({
 reference:['',[Validators.required, Validators.minLength(3)]],
       
-      nomProduit: [
+      libelle: [
         '',
         Validators.required
       ],
 
-      description: [
+      type: [
         '',
         Validators.required
       ],
 
-      prixUnitaireHT: [
+      valeur: [
         0,
         [
           Validators.required,
@@ -85,67 +86,48 @@ reference:['',[Validators.required, Validators.minLength(3)]],
         ]
       ],
 
-      quantiteStock: [
-        0,
-        [
-          Validators.required,
-          Validators.min(0)
-        ]
-      ]
+
 
     });
-
-  ngOnInit(): void {
+      ngOnInit(): void {
 
     const id =
       this.route.snapshot.paramMap.get('id');
 
     if (id) {
 
-      this.productId =
+      this.taxeId =
         Number(id);
 
-      this.loadProduct(
-        this.productId
+      this.loadTaxe(
+        this.taxeId
       );
     }
   }
-
-  loadproductt(id:number):void{
-    this.productService.getById(id).subscribe({
-      next :(product)=>{
-        
-      }
-
-      
-    })
-  }
-  loadProduct(id: number): void {
+  
+loadTaxe(id: number): void {
 
     this.loading = true;
 
-    this.productService
+    this.taxeService
       .getById(id)
       .subscribe({
 
-        next: (product) => {
+        next: (taxe) => {
 
           this.form.patchValue({
 
-            reference:
-              product.reference,
+            libelle:
+              taxe.libelle,
 
-            nomProduit:
-              product.nomProduit,
+            type:
+              taxe.type,
 
-            description:
-              product.description,
+            valeur:
+              taxe.valeur,
 
-            prixUnitaireHT:
-              product.prixUnitaireHT,
 
-            quantiteStock:
-              product.quantiteStock
+           
           });
 
           this.loading = false;
@@ -166,8 +148,7 @@ reference:['',[Validators.required, Validators.minLength(3)]],
 
       });
   }
-
-  submit(): void {
+   submit(): void {
 
     if (this.form.invalid) {
 
@@ -181,27 +162,25 @@ reference:['',[Validators.required, Validators.minLength(3)]],
 
     this.loading = true;
 
-    if (this.productId) {
+    if (this.taxeId) {
 
-      this.updateProduct(dto);
+      this.updateTaxe(dto);
 
     } else {
 
-      this.createProduct(dto);
+      this.createTaxe(dto);
     }
   }
-
-  private createProduct(
+ private createTaxe(
     dto: {
-      reference: string;
-      nomProduit: string;
-      description: string;
-      prixUnitaireHT: number;
-      quantiteStock: number;
+      libelle: string;
+      type: string;
+      valeur: number;
+    
     }
   ): void {
 
-    this.productService
+    this.taxeService
       .create(dto)
       .subscribe({
 
@@ -236,23 +215,22 @@ reference:['',[Validators.required, Validators.minLength(3)]],
       });
   }
 
-  private updateProduct(
+  private updateTaxe(
     dto: {
-      reference: string;
-      nomProduit: string;
-      description: string;
-      prixUnitaireHT: number;
-      quantiteStock: number;
+      libelle: string;
+      type: string;
+      valeur: number;
+   
     }
   ): void {
 
-    if (!this.productId) {
+    if (!this.taxeId) {
       return;
     }
 
-    this.productService
+    this.taxeService
       .update(
-        this.productId,
+        this.taxeId,
         dto
       )
       .subscribe({
@@ -260,11 +238,11 @@ reference:['',[Validators.required, Validators.minLength(3)]],
         next: () => {
 
           this.toastService.success(
-            'Produit modifié avec succès.'
+            'taxe modifié avec succès.'
           );
 
           this.router.navigate([
-            '/products'
+            '/taxes'
           ]);
         },
 
@@ -276,7 +254,7 @@ reference:['',[Validators.required, Validators.minLength(3)]],
 
           const message =
             (error.error as any)?.message ??
-            'Une erreur est survenue lors de la modification du produit.';
+            'Une erreur est survenue lors de la modification du taxe.';
 
           this.toastService.error(
             message
@@ -291,7 +269,10 @@ reference:['',[Validators.required, Validators.minLength(3)]],
   cancel(): void {
 
     this.router.navigate([
-      '/products'
+      '/taxes'
     ]);
   }
+
+
 }
+

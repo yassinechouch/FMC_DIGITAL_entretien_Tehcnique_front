@@ -41,60 +41,53 @@ import {
 })
 export class ClientForm implements OnInit {
 
-  private readonly fb =
-    inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
 
-  private readonly route =
-    inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  private readonly router =
-    inject(Router);
+  private readonly router = inject(Router);
 
-  private readonly clientService =
-    inject(ClientService);
+  private readonly clientService = inject(ClientService);
 
-  private readonly toastService =
-    inject(ToastService);
+  private readonly toastService = inject(ToastService);
 
-  private readonly cdr =
-    inject(ChangeDetectorRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   clientId?: number;
 
   loading = false;
 
-  readonly form =
-    this.fb.nonNullable.group({
+  readonly form = this.fb.nonNullable.group({
 
-      nom: [
-        '',
-        Validators.required
-      ],
+    nom: [
+      '',
+      Validators.required
+    ],
 
-      prenomOuRaisonSociale: [
-        '',
-        Validators.required
-      ],
+    prenomOuRaisonSociale: [
+      '',
+      Validators.required
+    ],
 
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
-
-      telephone: [
-        '',
-        Validators.required
-      ],
-
-      adresse: [
-        '',
-        Validators.required
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.email
       ]
+    ],
 
-    });
+    telephone: [
+      '',
+      Validators.required
+    ],
+
+    adresses: this.fb.array([
+      this.createAdresseControl()
+    ])
+
+  });
+
 
   ngOnInit(): void {
 
@@ -111,6 +104,48 @@ export class ClientForm implements OnInit {
       );
     }
   }
+
+
+  // =========================
+  // ADRESSES
+  // =========================
+
+  get adresses() {
+    return this.form.controls.adresses;
+  }
+
+
+  private createAdresseControl() {
+
+    return this.fb.nonNullable.control(
+      '',
+      Validators.required
+    );
+  }
+
+
+  addAdresse(): void {
+
+    this.adresses.push(
+      this.createAdresseControl()
+    );
+  }
+
+
+  removeAdresse(index: number): void {
+
+    // Au moins une adresse
+    if (this.adresses.length === 1) {
+      return;
+    }
+
+    this.adresses.removeAt(index);
+  }
+
+
+  // =========================
+  // LOAD CLIENT
+  // =========================
 
   private loadClient(
     id: number
@@ -136,11 +171,43 @@ export class ClientForm implements OnInit {
               client.email,
 
             telephone:
-              client.telephone,
+              client.telephone
 
-            adresse:
-              client.adresses[0] ?? ''
           });
+
+
+          // Supprimer les anciennes lignes
+          this.adresses.clear();
+
+
+          // Ajouter les adresses du client
+          if (
+            client.adresses &&
+            client.adresses.length > 0
+          ) {
+
+            client.adresses.forEach(
+              adresse => {
+
+                this.adresses.push(
+                  this.fb.nonNullable.control(
+                    adresse,
+                    Validators.required
+                  )
+                );
+
+              }
+            );
+
+          } else {
+
+            // Toujours au moins une adresse
+            this.adresses.push(
+              this.createAdresseControl()
+            );
+
+          }
+
 
           this.loading = false;
 
@@ -161,6 +228,11 @@ export class ClientForm implements OnInit {
       });
   }
 
+
+  // =========================
+  // SUBMIT
+  // =========================
+
   submit(): void {
 
     if (this.form.invalid) {
@@ -170,8 +242,10 @@ export class ClientForm implements OnInit {
       return;
     }
 
+
     const value =
       this.form.getRawValue();
+
 
     const dto = {
 
@@ -187,12 +261,14 @@ export class ClientForm implements OnInit {
       telephone:
         value.telephone,
 
-      adresses: [
-        value.adresse
-      ]
+      adresses:
+        value.adresses
+
     };
 
+
     this.loading = true;
+
 
     if (this.clientId) {
 
@@ -203,6 +279,11 @@ export class ClientForm implements OnInit {
       this.createClient(dto);
     }
   }
+
+
+  // =========================
+  // CREATE
+  // =========================
 
   private createClient(
     dto: {
@@ -249,6 +330,11 @@ export class ClientForm implements OnInit {
       });
   }
 
+
+  // =========================
+  // UPDATE
+  // =========================
+
   private updateClient(
     dto: {
       nom: string;
@@ -262,6 +348,7 @@ export class ClientForm implements OnInit {
     if (!this.clientId) {
       return;
     }
+
 
     this.clientService
       .update(
@@ -301,10 +388,16 @@ export class ClientForm implements OnInit {
       });
   }
 
+
+  // =========================
+  // CANCEL
+  // =========================
+
   cancel(): void {
 
     this.router.navigate([
       '/clients'
     ]);
   }
+
 }

@@ -9,23 +9,19 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Product } from '../../../core/models/product.model';
-import { ProductService } from '../../../core/services/product.service';
+import { Taxe } from '../../../core/models/Taxe.model';
+import { TaxeService } from '../../../core/services/taxe.service';
 import { ToastService } from '../../../core/services/toast.service';
-
 @Component({
-  selector: 'app-product-list',
-  imports: [
-    CommonModule,
-    RouterLink
-  ],
-  templateUrl: './product-list.html',
-  styleUrl: './product-list.scss'
+  selector: 'app-taxe-list',
+  imports: [   CommonModule,
+    RouterLink],
+  templateUrl: './taxe-list.html',
+  styleUrl: './taxe-list.scss',
 })
-export class ProductList implements OnInit {
-
-  private readonly productService =
-    inject(ProductService);
+export class TaxeList {
+  private readonly taxeservice =
+    inject(TaxeService);
 
   private readonly router =
     inject(Router);
@@ -36,23 +32,23 @@ export class ProductList implements OnInit {
   private readonly cdr =
     inject(ChangeDetectorRef);
 
-  products: Product[] = [];
+  taxes: Taxe[] = [];
 searchTerm ='';
   loading = true;
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadtaxes();
   }
 
-  loadProducts(): void {
+  loadtaxes(): void {
 
     this.loading = true;
 
-    this.productService.getAll().subscribe({
+    this.taxeservice.getAll().subscribe({
 
-      next: (products) => {
+      next: (taxes) => {
 
-        this.products = products;
+        this.taxes = taxes;
 
         this.loading = false;
 
@@ -71,35 +67,28 @@ searchTerm ='';
       }
     });
   }
-get filteredProducts(): Product[] {
-  const term = this.searchTerm.toLowerCase().trim();
 
-  return this.products.filter(p =>
-    p.nomProduit.toLowerCase().includes(term) ||
-    p.reference.toLowerCase().includes(term)
-  );
-}
   edit(id: number): void {
 
     this.router.navigate([
-      '/products',
+      '/taxes',
       id,
       'edit'
     ]);
   }
 
-  delete(product: Product): void {
+  delete(Taxe: Taxe): void {
 
     const confirmed = confirm(
-      `Supprimer le produit "${product.nomProduit}" ?`
+      `Supprimer le produit "${Taxe.libelle}" ?`
     );
 
     if (!confirmed) {
       return;
     }
 
-    this.productService
-      .delete(product.id)
+    this.taxeservice
+      .delete(Taxe.id)
       .subscribe({
 
         next: () => {
@@ -108,7 +97,7 @@ get filteredProducts(): Product[] {
             'Produit supprimé avec succès.'
           );
 
-          this.loadProducts();
+          this.loadtaxes();
 
           this.cdr.detectChanges();
         },
