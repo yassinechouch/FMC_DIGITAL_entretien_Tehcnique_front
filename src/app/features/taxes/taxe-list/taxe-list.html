@@ -1,0 +1,118 @@
+<div class="page">
+
+  <div class="page-header">
+
+    <div>
+    
+
+      <h1>Taxes</h1>
+
+      <p>
+        Gérez vos Taxes,
+      </p>
+    </div>
+
+    <a
+      routerLink="/taxes/new"
+      class="btn btn-primary">
+
+      + Nouveau Taxes
+    </a>
+
+  </div>
+
+  
+
+  <div class="card">
+
+    <div class="card-header">
+      <div>
+        <h2>Catalogue produits</h2>
+        <span>
+          {{ taxes.length }} produit(s)
+        </span>
+      </div>
+    </div>
+
+    @if (loading==true) {
+
+      <div class="state">
+        Chargement...
+      </div>
+
+    } @else {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Libelle</th>
+              <th>Type</th>
+              <th>Valeur</th>
+              <th>Etat</th>
+              
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (taxe of taxes; track taxe.id) {
+
+              <tr>
+
+                <td>
+                  <span class="Libellé">
+                    {{ taxe.libelle }}
+                  </span>
+                </td>
+
+                <td>
+                  <strong>
+                    {{ taxe.type }}
+                  </strong>
+                </td>
+
+                <td>
+                  {{ taxe.valeur  }}
+                </td>
+
+                <td>
+                       <small class="Etat">
+                    {{ taxe.etat }}
+                  </small>
+                </td>
+
+                <td class="actions">
+
+                  <button
+                    class="btn-icon"
+                    (click)="edit(taxe.id)">
+                    Modifier
+                  </button>
+
+                  <button
+                    class="btn-icon danger"
+                    (click)="delete(taxe)">
+                    Supprimer
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

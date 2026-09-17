@@ -1,0 +1,104 @@
+<div class="page form-page">
+
+  <div class="page-header">
+
+    <div>
+      <div class="page-label">
+        Taxes
+      </div>
+
+      <h1>
+        {{
+          taxeId
+            ? 'Modifier le produit'
+            : 'Nouveau produit'
+        }}
+      </h1>
+
+      <p>
+        Configurez les informations commerciales du produit.
+      </p>
+
+    </div>
+
+  </div>
+
+ 
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="card form-card">
+
+    <div class="form-section">
+
+      <h2>Informations taxe</h2>
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>Libelle*</label>
+
+          <input
+            formControlName="libelle"
+            placeholder="">
+
+        </div>
+       
+
+        <div class="field">
+
+          <label>Type</label>
+
+          <input
+            formControlName="type"
+            placeholder="type du mantant">
+            
+        </div>
+
+        
+
+        <div class="field">
+
+          <label>mantant *</label>
+
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="valeur">
+           
+
+        </div>
+
+    
+
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="cancel()">
+
+        Annuler
+
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loading">
+
+        {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

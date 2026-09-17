@@ -29,10 +29,14 @@ import { ClientService } from '../../../core/services/client.service';
 import { ProductService } from '../../../core/services/product.service';
 import { OrderService } from '../../../core/services/order.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { Taxe } from '../../../core/models/Taxe.model';
 
 type OrderLineForm = FormGroup<{
   productId: FormControl<number>;
   quantite: FormControl<number>;
+}>;
+type TaxeLineForm = FormGroup<{
+  taxeId: FormControl<number>;
 }>;
 
 @Component({
@@ -69,7 +73,7 @@ export class OrderForm implements OnInit {
 
   clients: Client[] = [];
   products: Product[] = [];
-
+  taxess: Taxe[] = [];
   orderId?: number;
 
   loading = false;
@@ -91,11 +95,17 @@ export class OrderForm implements OnInit {
     }),
 
     lignes:
-      new FormArray<OrderLineForm>([])
+      new FormArray<OrderLineForm>([]),
+
+      taxes : new FormArray<TaxeLineForm>([])
   });
 
   get lignes(): FormArray<OrderLineForm> {
     return this.form.controls.lignes;
+  }
+  get taxes(): FormArray<TaxeLineForm>{
+return this.form.controls.taxes
+;
   }
 
   ngOnInit(): void {
@@ -182,7 +192,7 @@ export class OrderForm implements OnInit {
             clientId:
               order.clientId
           });
-
+          this.taxes.clear();
           this.lignes.clear();
 
           order.lignes.forEach(
@@ -192,6 +202,17 @@ export class OrderForm implements OnInit {
                 this.createLineForm(
                   line.productId,
                   line.quantite
+                )
+              );
+            }
+          );
+              order.taxes.forEach(
+            (taxe) => {
+
+              this.lignes.push(
+                this.createLineForm(
+                  taxe.taxeId,
+                  
                 )
               );
             }
@@ -239,14 +260,33 @@ export class OrderForm implements OnInit {
         })
     });
   }
+ private createTaxeForm(
+    taxeId: number = 0,
+   
+  ): TaxeLineForm {
 
+    return new FormGroup({
+
+      taxeId:
+        new FormControl(taxeId, {
+          nonNullable: true,
+         
+        })
+        });
+
+  
+  }
   addLine(): void {
 
     this.lignes.push(
       this.createLineForm()
     );
   }
-
+ addTaxe(): void {
+  this.taxes.push(
+    this.createTaxeForm()
+  );
+ }
   removeLine(index: number): void {
 
     if (this.lignes.length <= 1) {
@@ -255,6 +295,15 @@ export class OrderForm implements OnInit {
 
     this.lignes.removeAt(index);
   }
+  removeTaxe(index: number): void {
+
+    if (this.lignes.length <= 1) {
+      return;
+    }
+
+    this.taxes.removeAt(index);
+  }
+
 
   getProduct(
     productId: number
@@ -266,14 +315,24 @@ export class OrderForm implements OnInit {
         Number(productId)
     );
   }
+getTaxe(
+    taxeId: number
+  ): Taxe | undefined {
 
+    return this.taxess.find(
+      taxe =>
+        taxe.id ===
+        Number(taxeId)
+    );
+  }
   getLineTotal(
     index: number
   ): number {
 
     const line =
       this.lignes.at(index);
-
+    const taxe = this.taxes.at(index);
+    const taxeId = taxe.controls.taxeId.value;
     const productId =
       line.controls.productId.value;
 
@@ -282,6 +341,7 @@ export class OrderForm implements OnInit {
 
     const product =
       this.getProduct(productId);
+      const taxe2 = this.getTaxe(taxeId);
 
     if (!product) {
       return 0;
@@ -292,6 +352,8 @@ export class OrderForm implements OnInit {
       quantite
     );
   }
+ 
+  
 
   get totalHT(): number {
 

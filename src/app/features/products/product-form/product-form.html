@@ -44,6 +44,9 @@
             placeholder="Ex: PROD-001">
 
         </div>
+        <span class="message_error" *ngIf="(form.get('reference')?.touched && form.get('reference')?.errors?.['required']) || (form.get('reference')?.errors?.['lengthmin'])">
+           refrence est obligatoires
+        </span>
 
         <div class="field">
 
@@ -52,7 +55,8 @@
           <input
             formControlName="nomProduit"
             placeholder="Nom du produit">
-
+            <span *ngIf="form.get('nomProduit')?.touched && form.get('nomProduit')?.errors?.['required']"  ></span>
+                           nom produit est obligatoire
         </div>
 
         <div class="field field-full">
@@ -76,6 +80,9 @@
             min="0"
             step="0.01"
             formControlName="prixUnitaireHT">
+            <div class="error-message" *ngIf="form.get('prixUnitaireHT')?.errors?.['min']">
+                     Le prix unitaire HT doit etre supérieur ou egale a 0
+            </div>
 
         </div>
 

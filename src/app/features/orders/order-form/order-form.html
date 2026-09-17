@@ -97,6 +97,14 @@
           + Ajouter une ligne
 
         </button>
+          <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="addTaxe()">
+
+          + Add tAXE
+
+        </button>
 
       </div>
 
@@ -194,6 +202,100 @@
         }
 
       </div>
+       <div
+        formArrayName="lignes"
+        class="order-lines">
+
+        @for (
+          taxe of taxes.controls;
+          track $index;
+          let i = $index
+        ) {
+
+          <div
+            class="order-line"
+            [formGroupName]="i">
+
+            <div class="field product-field">
+
+              <label>Taxe</label>
+
+              <select formControlName="taxeId">
+
+                <option [ngValue]="0">
+                  Sélectionner
+                </option>
+
+                @for (taxe of taxess; track taxe.id) {
+
+                  <option [ngValue]="taxe.id">
+
+                    {{ taxe.libelle }}
+                   
+
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+            <div class="field small-field">
+
+              <label>Quant</label>
+
+              <input
+                type="number"
+                min="1"
+                formControlName="quantite">
+
+            </div>
+
+            <div class="line-info">
+
+              <span>Prix HT</span>
+<strong>
+  {{
+    (
+      getProduct(
+        taxe.controls.taxeId.value
+      )?.prixUnitaireHT || 0
+    )
+    | number:'1.2-2'
+  }}
+</strong>
+
+            </div>
+
+            <div class="line-info">
+
+              <span>Total</span>
+
+              <strong>
+                {{
+                  getLineTotal(i)
+                    | number:'1.2-2'
+                }}
+              </strong>
+
+            </div>
+
+            <button
+              type="button"
+              class="remove-line"
+              (click)="removeLine(i)">
+
+              ×
+
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+      
 
     </div>
 

@@ -4,10 +4,12 @@ export enum OrderStatus {
   Annulee = 2
 }
 
+
 export interface OrderLineCreate {
   productId: number;
   quantite: number;
 }
+
 
 export interface OrderLine {
   id: number;
@@ -16,7 +18,15 @@ export interface OrderLine {
   quantite: number;
   prixUnitaire: number;
   totalLigne: number;
+  
 }
+export interface TaxeLine {
+  id: number;
+  taxeId: number;
+ 
+  
+}
+
 
 export interface Order {
   id: number;
@@ -31,6 +41,7 @@ export interface Order {
   totalHT: number;
   totalTTC: number;
   lignes: OrderLine[];
+  taxes : TaxeLine[];
 }
 
 export interface OrderCreate {
